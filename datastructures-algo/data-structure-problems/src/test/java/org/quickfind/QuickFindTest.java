@@ -1,6 +1,11 @@
-package org.problems.quickfind;
+package org.quickfind;
+
+import org.junit.jupiter.api.Test;
 
 public class QuickFindTest {
-    @Test
 
+    @Test
+    public void shouldTestQuickFind(){
+
+    }
 }
