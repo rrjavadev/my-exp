@@ -3,8 +3,7 @@ package quickunion;
 import java.util.stream.IntStream;
 
 /**
- * QuickUnion uses a tree
- *
+ * QuickUnion uses a tree structure.
  */
 public class DynamicConnectivityQuickUnion {
     int[] id;
@@ -17,5 +16,17 @@ public class DynamicConnectivityQuickUnion {
 
     public int[] getIds() {
         return id;
+    }
+
+    private int root(int index){
+
+        while (index != this.id[index]){
+            index = this.id[index];
+        }
+        return index;
+    }
+
+    public boolean connected(int id1, int id2) {
+        return root(id1) == root(id2);
     }
 }

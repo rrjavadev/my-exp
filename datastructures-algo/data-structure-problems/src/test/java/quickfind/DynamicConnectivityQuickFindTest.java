@@ -23,7 +23,6 @@ public class DynamicConnectivityQuickFindTest {
     public void shouldReturnFalseWhenIdsAreNotConnected() {
 
         //Given
-        int[] id = new int[]{0, 1, 2, 3};
         DynamicConnectivityQuickFind quickFind = new DynamicConnectivityQuickFind(4);
 
         //When

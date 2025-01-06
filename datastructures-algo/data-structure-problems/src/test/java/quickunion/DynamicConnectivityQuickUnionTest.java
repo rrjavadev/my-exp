@@ -21,7 +21,15 @@ class DynamicConnectivityQuickUnionTest {
     }
 
     @Test
-    public void shouldReturnTrueWhenTwoNodesAreConnected(){
+    public void shouldReturnFalseWhenTwoNodesAreNotConnected(){
 
+        //Given
+        DynamicConnectivityQuickUnion quickUnion = new DynamicConnectivityQuickUnion(4);
+
+        //When
+        boolean areConnected = quickUnion.connected(1, 2);
+
+        //Then
+        assertThat(areConnected).isFalse();
     }
 }
