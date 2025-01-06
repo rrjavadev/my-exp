@@ -29,4 +29,14 @@ public class DynamicConnectivityQuickUnion {
     public boolean connected(int id1, int id2) {
         return root(id1) == root(id2);
     }
+
+    public int[] union(int id1, int id2) {
+
+        int rootOfId1 = root(id1);
+        int rootOfId2 = root(id2);
+
+        id[rootOfId1] = rootOfId2;
+
+        return id;
+    }
 }

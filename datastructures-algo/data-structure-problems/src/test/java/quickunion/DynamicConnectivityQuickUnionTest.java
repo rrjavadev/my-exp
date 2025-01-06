@@ -1,12 +1,11 @@
 package quickunion;
 
 import org.junit.jupiter.api.Test;
-import quickfind.DynamicConnectivityQuickFind;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class DynamicConnectivityQuickUnionTest {
+
     @Test
     public void quickUnionShouldReturnAnArrayOfIds() {
 
@@ -21,7 +20,7 @@ class DynamicConnectivityQuickUnionTest {
     }
 
     @Test
-    public void shouldReturnFalseWhenTwoNodesAreNotConnected(){
+    public void shouldReturnFalseWhenTwoNodesAreNotConnected() {
 
         //Given
         DynamicConnectivityQuickUnion quickUnion = new DynamicConnectivityQuickUnion(4);
@@ -31,5 +30,21 @@ class DynamicConnectivityQuickUnionTest {
 
         //Then
         assertThat(areConnected).isFalse();
+    }
+
+    @Test
+    public void connectedShouldReturnTrueWhenUnionOfTwoNodesAreApplied() {
+
+        //Given
+        DynamicConnectivityQuickUnion quickUnion = new DynamicConnectivityQuickUnion(9);
+
+        //When
+        quickUnion.union(6, 1);
+        quickUnion.union(7, 8);
+
+        //Then
+        assertThat(quickUnion.connected(6, 1)).isTrue();
+        assertThat(quickUnion.connected(7, 8)).isTrue();
+        assertThat(quickUnion.connected(4, 8)).isFalse();//4 and 8 are unconnected
     }
 }
