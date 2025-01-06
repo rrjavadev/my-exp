@@ -19,4 +19,9 @@ class DynamicConnectivityQuickUnionTest {
         //Then
         assertThat(qu.getIds()).isEqualTo(id);
     }
+
+    @Test
+    public void shouldReturnTrueWhenTwoNodesAreConnected(){
+
+    }
 }

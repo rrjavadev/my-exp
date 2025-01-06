@@ -2,6 +2,10 @@ package quickunion;
 
 import java.util.stream.IntStream;
 
+/**
+ * QuickUnion uses a tree
+ *
+ */
 public class DynamicConnectivityQuickUnion {
     int[] id;
 
