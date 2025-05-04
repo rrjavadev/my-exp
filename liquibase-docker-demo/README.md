@@ -48,17 +48,26 @@ The project creates a sample table with the following structure:
 
 ## Running Locally with Maven
 
-You can run Liquibase migrations directly using Maven:
+You can run Liquibase migrations directly using Maven with properties:
 
 ```bash
-mvn liquibase:update
+mvn liquibase:update \
+  -Ddb.url="jdbc:postgresql://localhost:5432/mydb" \
+  -Ddb.username="postgres" \
+  -Ddb.password="password" \
+  -Ddb.schema="public"
 ```
 
 To use a different changelog file:
 
 ```bash
-mvn liquibase:update -Dliquibase.changeLogFile=path/to/your/changelog.xml
-```
+mvn liquibase:update \
+  -Dliquibase.url=jdbc:postgresql://localhost:5432/postgres \
+  -Dliquibase.username=postgres \
+  -Dliquibase.password=mysecretpassword \
+  -Dliquibase.searchPath=src/main/resources \
+  -Dliquibase.changeLogFile=db/changelog/db.changelog-master.xml 
+  ```
 
 ## Building and Running with Docker
 
@@ -80,13 +89,25 @@ The project uses Google Jib for containerisation. To build and run the container
      liquibase-docker-demo:1.0-SNAPSHOT
    ```
 
-### Environment Variables
+### Properties and Environment Variables
 
-1. `DB_URL`: JDBC connection URL for your PostgreSQL database
-2. `DB_USERNAME`: Database username
-3. `DB_PASSWORD`: Database password
-4. `DB_SCHEMA`: Target schema name
-5. `CHANGELOG_FILE`: Path to the Liquibase changelog file
+The following properties/environment variables are required:
+
+1. `db.url` / `DB_URL`: JDBC connection URL for your PostgreSQL database
+   - Format: `jdbc:postgresql://host:port/database`
+   - Example: `jdbc:postgresql://localhost:5432/mydb`
+
+2. `db.username` / `DB_USERNAME`: Database username
+   - Example: `postgres`
+
+3. `db.password` / `DB_PASSWORD`: Database password
+   - Example: `your-secure-password`
+
+4. `db.schema` / `DB_SCHEMA`: Target schema name
+   - Example: `public`
+
+5. `liquibase.changeLogFile` / `CHANGELOG_FILE`: Path to the Liquibase changelog file
+   - Default: `db/changelog/db.changelog-master.xml`
 
 ### Example Usage
 
@@ -118,14 +139,15 @@ docker run -it \
 - PostgreSQL 42.7.1 driver
 - Docker containerisation using Google Jib
 - Schema isolation
-- Secure credential handling
+- Secure credential handling through Maven properties and environment variables
 - External changelog file support
 - Maven-based execution
 
 ## Security Notes
 
-- Database credentials are passed via environment variables
+- Database credentials are passed via Maven properties or environment variables
 - No hardcoded credentials in the code
+- Properties can be managed securely in your deployment environment
 - Schema isolation for better security
 - Changelog files can be mounted as volumes for external management
 
@@ -139,6 +161,9 @@ If you encounter any issues:
 4. Verify that the user has necessary permissions
 5. Confirm the changelog file path is correct and accessible
 6. Check Maven and Docker logs for detailed error messages
+7. Ensure all required properties/environment variables are set
+8. Verify that the properties/environment variables are being passed correctly
+9. Check that the Maven resource filtering is working correctly
 
 ## License
 

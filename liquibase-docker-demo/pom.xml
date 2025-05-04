@@ -15,6 +15,11 @@
         <liquibase.version>4.25.0</liquibase.version>
         <postgresql.version>42.7.1</postgresql.version>
         <maven.jib.version>3.4.0</maven.jib.version>
+        <!-- Default database properties -->
+        <db.url>jdbc:postgresql://localhost:5432/mydb</db.url>
+        <db.username>postgres</db.username>
+        <db.password>password</db.password>
+        <db.schema>public</db.schema>
     </properties>
 
     <dependencies>
@@ -31,22 +36,46 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.liquibase</groupId>
+                    <artifactId>liquibase-maven-plugin</artifactId>
+                    <version>${liquibase.version}</version>
+                    <configuration>
+<!--                        <propertyFile>src/main/resources/liquibase.properties</propertyFile>-->
+                        <changeLogFile>db/changelog/db.changelog-master.xml</changeLogFile>
+                        <propertyFileWillOverride>true</propertyFileWillOverride>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                            <version>${postgresql.version}</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <plugins>
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>${liquibase.version}</version>
-                <configuration>
-                    <propertyFile>src/main/resources/liquibase.properties</propertyFile>
-                    <changeLogFile>db/changelog/db.changelog-master.xml</changeLogFile>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${postgresql.version}</version>
-                    </dependency>
-                </dependencies>
+                <executions>
+                    <execution>
+                        <id>update-database</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>update</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
@@ -63,12 +92,13 @@
                         <entrypoint>
                             <shell>mvn</shell>
                             <arg>liquibase:update</arg>
-                            <arg>-Dliquibase.propertyFile=/app/liquibase.properties</arg>
-                            <arg>-Dliquibase.changeLogFile=${CHANGELOG_FILE}</arg>
+                            <arg>-Dliquibase.url=${DB_URL}</arg>
+                            <arg>-Dliquibase.username=${DB_USERNAME}</arg>
+                            <arg>-Dliquibase.password=${DB_PASSWORD}</arg>
+                            <arg>-Ddb.schema=${DB_SCHEMA}</arg>
+                            <arg>-Dliquibase.searchPath=src/main/resources</arg>
+                            <arg>-Dliquibase.changeLogFile=db/changelog/db.changelog-master.xml</arg>
                         </entrypoint>
-                        <environment>
-                            <CHANGELOG_FILE>db/changelog/db.changelog-master.xml</CHANGELOG_FILE>
-                        </environment>
                     </container>
                 </configuration>
             </plugin>
