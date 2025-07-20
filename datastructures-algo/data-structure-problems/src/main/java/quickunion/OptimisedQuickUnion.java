@@ -38,7 +38,7 @@ public class OptimisedQuickUnion {
         int rootOfId2 = root(id2);
         id[rootOfId1] = rootOfId2;
 
-        if(sz[])
+//        if(sz[])
 
 
         return id;
